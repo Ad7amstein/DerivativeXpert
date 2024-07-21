@@ -1,22 +1,36 @@
+"""A module to plot a function."""
+
+
+from advanced_calc.function import Function
 import sympy as sp
-import matplotlib.pyplot as plt
- 
-
-class Plotter :
-    
-
-    def __init__ (self, function):
-        self.function =  function
+from sympy.abc import x
 
 
-    def plotw (self) :
-        x = sp.Symbol('x')
-        function = x**2
-        sp.plot(function, (x, -10, 10), title='Plot of $f(x) = x^2$', xlabel='$x$', ylabel='$f(x)$', line_color='blue', show=True)
+class Plotter:
+    """A class to plot a function."""
 
+    def __init__(self, func):
+        """Initialize the class.
 
+        Args:
+            function (str): The function to plot.
+        """
+        self.function = func
 
+    def plot(self):
+        """Plot the function."""
+        fun_str = str(self.function.expression)
+        sp.plot(
+            self.function.expression,
+            (x, -100, 100),
+            title=f"Plot of $f(x) = {fun_str}$",
+            xlabel="$x$",
+            ylabel="$f(x)$",
+            line_color="blue",
+            show=True,
+        )
 
-
-s = Plotter ("x^2")
-s.plotw()
+if __name__ == "__main__":
+    function = Function("x^2")
+    plt = Plotter(function)
+    plt.plot()
