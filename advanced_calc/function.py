@@ -25,16 +25,16 @@ class Function:
     @expression.setter
     def expression(self, expression):
         """Set the expression of the function
-        
+
         Args:
             expression (str): The expression of the function
-        
+
         Raises:
             ValueError: If the expression is invalid
         """
         if not self.is_valid_expression(expression):
             raise ValueError("Invalid expression")
-        self.__expression = simplify(expression)
+        self.__expression = sympify(expression)
 
     @property
     def fvars(self):
@@ -44,10 +44,10 @@ class Function:
     @fvars.setter
     def fvars(self, fvars):
         """Set the arguments of the function
-        
+
         Args:
             fvars (list): The arguments of the function
-        
+
         Raises:
             ValueError: If the arguments are invalid
         """
@@ -57,22 +57,26 @@ class Function:
 
     def evaluate(self, value):
         """Evaluate the function at a given value
-        
+
         Args:
             value (float): The value to evaluate the function at
-        
+
         Returns:
             float: The value of the function at the given value
-        
+
         Raises:
             ValueError: If the value is invalid
         """
         try:
-            value = float(sympify(value).evalf())
+            value = float(simplify(value).evalf())
         except ValueError as exc:
             raise ValueError("Invalid value") from exc
 
-        return round(self.__expression.subs({self.__fvars[0]: value}).evalf(), 3)
+        return round(
+            float(simplify(self.__expression).subs(
+                {self.__fvars[0]: value}).evalf()),
+            3
+        )
 
     @staticmethod
     def is_valid_expression(expression):
@@ -98,6 +102,6 @@ class Function:
         return len(fvars) == 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     f1 = Function("ln(x)")
     print(f1.evaluate("E"))
