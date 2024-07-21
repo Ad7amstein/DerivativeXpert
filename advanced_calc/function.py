@@ -58,7 +58,7 @@ class Function:
             float: The value of the function at the given value
         """
         value = sympify(value)
-        return self.__expression.subs({x: value}).evalf()
+        return round(self.__expression.subs({x: value}).evalf(), 3)
 
     @staticmethod
     def is_valid_expression(expression):
@@ -80,5 +80,6 @@ class Function:
         return True
 
 
-f1 = Function("ln(x)")
-print(f1.evaluate("E"))
+if __name__ == '__main__':
+    f1 = Function("ln(x)")
+    print(f1.evaluate("E"))
