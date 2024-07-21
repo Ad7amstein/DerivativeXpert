@@ -33,8 +33,9 @@ class BasicCalculator :
     @expression.setter
     def expression (self, expression) :
         if (not self.is_valid_expression(expression)) :
-            raise ValueError ("Invalid expression") 
-        self.__expression = expression
+            print("errorrrr")
+            # raise ValueError ("Invalid expression") 
+        self.__expression = sp.simplify(expression)
 
 
     @staticmethod
@@ -47,7 +48,7 @@ class BasicCalculator :
         """
         try :
             sp.sympify(expression)
-            print("11111111111")
+            # print("11111111111")
             return True
         except :
             return False
@@ -60,8 +61,8 @@ class BasicCalculator :
                  or a string "invalid expression".
         """
         if (self.is_valid_expression(self.__expression)) :
-            res = sp.sympify(self.__expression).evalf()
-            self.result = format(res, ".3f")
+            res = round((self.__expression).evalf(),3)
+            self.result = res
             return self.result
         else :
             return "Invalid expression"
@@ -70,10 +71,10 @@ class BasicCalculator :
         
 
 
-expr = "8+gff"
+expr = "8+6"
 calculator = BasicCalculator(expr)
-# result = calculator.evaluate_expression()
-# print(f"Result: {result}")   
+result = calculator.evaluate_expression()
+print(f"Result: {result}")   
 
 
 
