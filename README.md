@@ -5,4 +5,5 @@
 [![GitHub stars](https://img.shields.io/github/stars/Ad7amstein/Disease-Prediction.svg?style=social&label=Star)](https://github.com/Ad7amstein/Disease-Prediction/stargazers/)
 
 The ultimate tool for basic and advanced calculus, including plotting, derivatives, limits, and more.
+
 ---
