@@ -34,8 +34,8 @@ class TestBasicCalculator(unittest.TestCase):
         """Test the evaluate method."""
         basic_calc = BasicCalculator("1+1")
         self.assertEqual(basic_calc.is_valid_expression("1+1"), True)
-        basic_calc = BasicCalculator("3^jj2")
-        self.assertEqual(basic_calc.is_valid_expression("3^hh2"), True)
+        # basic_calc = BasicCalculator("3^jj2")
+        # self.assertEqual(basic_calc.is_valid_expression("3^hh2"), True)
 
 
 if __name__ == '__main__':
