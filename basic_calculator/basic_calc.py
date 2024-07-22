@@ -61,32 +61,20 @@ class BasicCalculator :
                  or a string "invalid expression".
         """
         if (self.is_valid_expression(self.__expression)) :
-            res = round((self.__expression).evalf(),3)
+            print(self.__expression,"9999999999999999999999999999")
+            res = ((self.__expression).evalf())
             self.result = res
             return self.result
         else :
-            return "Invalid expression"
+            return "qqqqqqqqqqqqqqqqqqqqqqqqqqqInvalid expression"
         
 
         
 
 
-expr = "8+6"
+expr = "ss*9"
 calculator = BasicCalculator(expr)
 result = calculator.evaluate_expression()
 print(f"Result: {result}")   
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
