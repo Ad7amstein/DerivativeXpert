@@ -4,6 +4,7 @@ import unittest
 from advanced_calc.function import Function
 from sympy.abc import x
 from sympy import log, sqrt, E, pi, sin, cos, tan, sinh, asec, sympify
+from pycodestyle import Checker
 
 
 class TestFunction(unittest.TestCase):
@@ -12,6 +13,24 @@ class TestFunction(unittest.TestCase):
     def setUp(self):
         """Set up the test cases."""
         self.function = Function("x**2")
+
+    def test_docs(self):
+        """Test the docstrings."""
+        self.assertIsNotNone(Function.__doc__)
+        self.assertIsNotNone(Function.__init__.__doc__)
+        self.assertIsNotNone(Function.expression.__doc__)
+        self.assertIsNotNone(Function.expression.__doc__)
+        self.assertIsNotNone(Function.fvars.__doc__)
+        self.assertIsNotNone(Function.fvars.__doc__)
+        self.assertIsNotNone(Function.evaluate.__doc__)
+
+    def test_pycodestyle(self):
+        """Test the pycodestyle."""
+        files = ["advanced_calc/function.py"]
+        for file in files:
+            checker = Checker(file)
+            file_errors = checker.check_all()
+            self.assertEqual(file_errors, 0)
 
     def test_expression(self):
         """Test the expression property."""
