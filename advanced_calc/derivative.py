@@ -59,11 +59,11 @@ class Derivative:
         """Plot the derivative of the function"""
         Plotter.plot(func=self.function)
 
+if __name__ == "__main__":
+    f = Function("x^5")
+    Plotter.plot(func=f)
 
-f = Function("x^5")
-Plotter.plot(func=f)
-
-d = Derivative(f)
-print(d.diffrentiate(order=20, steps=True))
-print(d.evaluate(3))
-print(d.plot())
+    d = Derivative(f)
+    print(d.diffrentiate(order=20, steps=True))
+    print(d.evaluate(3))
+    print(d.plot())
