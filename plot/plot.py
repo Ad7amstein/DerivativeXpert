@@ -18,7 +18,12 @@ class Plotter:
 
     @staticmethod
     def plot(instance=None, func=None):
-        """Plot the function."""
+        """Plot the function.
+        
+        Args:
+            instance (Plotter): The instance of the class.
+            func (Function): The function to plot.
+        """
         if not func and not instance.function:
             raise ValueError("No function to plot.")
         if not func:
