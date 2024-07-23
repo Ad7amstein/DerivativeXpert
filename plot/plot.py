@@ -40,3 +40,4 @@ if __name__ == "__main__":
     function = Function("x^2")
     plt = Plotter(function)
     Plotter.plot(plt)
+    Plotter.plot(plt)
