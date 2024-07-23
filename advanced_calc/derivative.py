@@ -10,11 +10,25 @@ class Derivative:
     """Derivative class to calculate the derivative of a function"""
 
     def __init__(self, function=None):
+        """Initialize the Derivative object
+        
+        Args:
+            function (Function, optional): Function object. Defaults to None.
+        """
         self.function = function
         self.diff = None
 
     def diffrentiate(self, function=None, order=1, steps=False):
-        """Differentiate the function"""
+        """Differentiate the function.
+        
+        Args:
+            function (Function, optional): Function object. Defaults to None.
+            order (int, optional): Order of differentiation. Defaults to 1.
+            steps (bool, optional): Print the steps. Defaults to False.
+        
+        Returns:
+            sympy.Derivative: The derivative of the function.
+        """
         if function:
             self.function = function
         if len(self.function.fvars) > 0:
@@ -31,7 +45,14 @@ class Derivative:
         return self.diff
 
     def evaluate(self, value):
-        """Evaluate the derivative at a given value"""
+        """Evaluate the derivative at a given value.
+        
+        Args:
+            value (int): The value at which to evaluate the derivative.
+        
+        Returns:
+            float: The value of the derivative at the given value.
+        """
         return self.function.evaluate(value)
 
     def plot(self):
