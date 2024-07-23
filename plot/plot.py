@@ -17,11 +17,17 @@ class Plotter:
         """
         self.function = func
 
-    def plot(self):
+    @staticmethod
+    def plot(instance=None, function=None):
         """Plot the function."""
-        fun_str = str(self.function.expression)
+        if not function and not instance.function:
+            raise ValueError("No function to plot.")
+        if not function:
+            function = instance.function
+
+        fun_str = str(function.expression)
         sp.plot(
-            self.function.expression,
+            function.expression,
             (x, -100, 100),
             title=f"Plot of $f(x) = {fun_str}$",
             xlabel="$x$",
@@ -33,4 +39,4 @@ class Plotter:
 if __name__ == "__main__":
     function = Function("x^2")
     plt = Plotter(function)
-    plt.plot()
+    Plotter.plot(plt)
