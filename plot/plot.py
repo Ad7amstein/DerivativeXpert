@@ -1,6 +1,5 @@
 """A module to plot a function."""
 
-
 from advanced_calc.function import Function
 import sympy as sp
 from sympy.abc import x
@@ -17,11 +16,17 @@ class Plotter:
         """
         self.function = func
 
-    def plot(self):
+    @staticmethod
+    def plot(instance=None, func=None):
         """Plot the function."""
-        fun_str = str(self.function.expression)
+        if not func and not instance.function:
+            raise ValueError("No function to plot.")
+        if not func:
+            func = instance.function
+
+        fun_str = str(func.expression)
         sp.plot(
-            self.function.expression,
+            func.expression,
             (x, -100, 100),
             title=f"Plot of $f(x) = {fun_str}$",
             xlabel="$x$",
@@ -30,7 +35,8 @@ class Plotter:
             show=True,
         )
 
+
 if __name__ == "__main__":
     function = Function("x^2")
     plt = Plotter(function)
-    plt.plot()
+    Plotter.plot(plt)
