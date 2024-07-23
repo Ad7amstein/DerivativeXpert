@@ -72,6 +72,12 @@ class Function:
         except ValueError as exc:
             raise ValueError("Invalid value") from exc
 
+        if len(self.fvars) == 0:
+            return round(
+                float(simplify(self.__expression).evalf()),
+                3
+            )
+
         return round(
             float(simplify(self.__expression).subs(
                 {self.__fvars[0]: value}).evalf()),
@@ -99,9 +105,11 @@ class Function:
             args (list): The arguments of the function
         Returns:
             bool: True if the arguments are valid, False otherwise"""
-        return len(fvars) == 1
+        return len(fvars) <= 1
 
 
 if __name__ == "__main__":
     f1 = Function("ln(x)")
     print(f1.evaluate("E"))
+    f2 = Function("2")
+    print(f2.evaluate(0))

@@ -2,17 +2,13 @@
 
 import unittest
 from advanced_calc.function import Function
-from sympy.abc import x
+from sympy.abc import x, y
 from sympy import log, sqrt, E, pi, sin, cos, tan, sinh, asec, sympify
 from pycodestyle import Checker
 
 
 class TestFunction(unittest.TestCase):
     """Test cases for the Function class."""
-
-    def setUp(self):
-        """Set up the test cases."""
-        self.function = Function("x**2")
 
     def test_docs(self):
         """Test the docstrings."""
@@ -34,31 +30,41 @@ class TestFunction(unittest.TestCase):
 
     def test_expression(self):
         """Test the expression property."""
-        self.assertEqual(self.function.expression, x**2)
-        self.function.expression = "ln(E)*log(x)+sqrt(5)/x-1^2"
-        self.assertEqual(self.function.expression, log(E)*log(x)+sqrt(5)/x-1**2)
-        self.function.expression = "sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)"
-        self.assertEqual(self.function.expression, sympify(sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)))
+        function = Function("x**2")
+        self.assertEqual(function.expression, x**2)
+        function = Function("ln(E)*log(x)+sqrt(5)/x-1^2")
+        self.assertEqual(function.expression, log(E)*log(x)+sqrt(5)/x-1**2)
+        function = Function("sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)")
+        self.assertEqual(function.expression, sympify(sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)))
+        function = Function("5")
+        self.assertEqual(function.expression, sympify(5))
 
         with self.assertRaises(ValueError):
-            self.function.expression = "ln(x))"
-            self.function.expression = "x++8"
-            self.function.expression = "x+2*-3"
+            function = Function("ln(x))")
+            function = Function("x++8")
+            function = Function("x+2*-3")
 
     def test_fvars(self):
         """Test the fvars property."""
-        self.function.expression = "x**2"
-        self.assertEqual(self.function.fvars, [x])
-        self.function.expression = "sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)"
-        self.assertEqual(self.function.fvars, [x])
+        function = Function("2")
+        self.assertEqual(function.fvars, [])
+        function = Function("x**2")
+        self.assertEqual(function.fvars, [x])
+        function = Function("y+5*y")
+        self.assertEqual(function.fvars, [y])
+        function = Function("sin(x)+cos(x)+tan(pi/4)+asec(1)-sinh(x)")
+        self.assertEqual(function.fvars, [x])
 
         with self.assertRaises(ValueError):
-            self.function.expression = "x**y"
-            self.function.expression = "3llam+fawzy-farg"
-            self.function.expression = "ln(x)+5*ln(y)"
+            function = Function("x**y")
+            function = Function("3llam+fawzy-farg")
+            function = Function("ln(x)+5*ln(y)")
 
     def test_evaluation(self):
         """Test the evaluate method."""
+        function = Function("2")
+        self.assertEqual(function.evaluate(2), 2.000)
+        self.assertEqual(function.evaluate(1408), 2.000)
         function = Function("x**2")
         self.assertEqual(function.evaluate(2), 4.000)
         function = Function("x**3")
