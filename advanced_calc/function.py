@@ -22,7 +22,11 @@ class Function:
 
     @property
     def expression(self):
-        """Get the expression of the function"""
+        """Get the expression of the function.
+        
+        Returns:
+            str: The expression of the function
+        """
         return self.__expression
 
     @expression.setter
@@ -41,7 +45,11 @@ class Function:
 
     @property
     def fvars(self):
-        """Get the arguments of the function"""
+        """Get the arguments of the function.
+        
+        Returns:
+            list: The arguments of the function
+        """
         return self.__fvars
 
     @fvars.setter
@@ -102,20 +110,45 @@ class Function:
         Args:
             args (list): The arguments of the function
         Returns:
-            bool: True if the arguments are valid, False otherwise"""
+            bool: True if the arguments are valid, False otherwise
+        """
         return len(fvars) <= 1
 
     def diffrentiate(self, order=1, steps=False):
+        """Differentiate the function.
+
+        Args:
+            order (int, optional): Order of differentiation. Defaults to 1.
+            steps (bool, optional): Print the steps. Defaults to False.
+        
+        Returns:
+            Function: The derivative of the function.
+        """
         return Function(
             str(self.diff.diffrentiate(function=self, order=order, steps=steps))
         )
 
     def slope(self, value):
-        """Calculate the slope of the function at a given value."""
+        """Calculate the slope of the function at a given value.
+        
+        Args:
+            value (float): The value at which to calculate the slope.
+        
+        Returns:
+            float: The slope of the function at the given value.
+        """
         return self.diffrentiate().evaluate(value)
 
     def critical_points(self, interval=None):
-        """Calculate the critical points of the function."""
+        """Calculate the critical points of the function.
+        
+        Args:
+            interval (list, optional): The interval to calculate the critical points.
+            Defaults to None.
+        
+        Returns:
+            list: The critical points of the function.
+        """
         if len(self.fvars) < 1:
             return None
         critical_points = []
@@ -128,7 +161,15 @@ class Function:
         return critical_points
 
     def extrema(self, interval=None):
-        """Calculate the extrema of the function."""
+        """Calculate the extrema of the function.
+        
+        Args:
+            interval (list, optional): The interval to calculate the extrema.
+            Defaults to None.
+        
+        Returns:
+            tuple: The minimum and maximum values of the function.
+        """
         critical_points = self.critical_points()
         start = interval[0]
         end = interval[1]
@@ -141,7 +182,11 @@ class Function:
         return mn, mx
 
     def intervals_of_increase_decreasing(self):
-        """Calculate the intervals of increase of the function."""
+        """Calculate the intervals of increase of the function.
+        
+        Returns:
+            dict: The intervals of increase and decrease of the function.
+        """
         critical_points = self.critical_points()
         if critical_points is None:
             if len(self.fvars) < 1:
@@ -164,16 +209,30 @@ class Function:
         return signs
 
     def inflection_points(self, interval=None):
-        """Calculate the inflection points of the function."""
-        # print(self.diffrentiate().critical_points())
+        """Calculate the inflection points of the function.
+        
+        Args:
+            interval (list, optional): The interval to calculate the inflection points.
+            Defaults to None.
+        
+        Returns:
+            list: The inflection points of the function.
+        """
         return self.diffrentiate().critical_points()
 
     def concavity(self, interval=None):
-        """Calculate the concavity of the function."""
+        """Calculate the concavity of the function.
+        
+        Args:
+            interval (list, optional): The interval to calculate the concavity.
+            Defaults to None.
+        
+        Returns:
+            dict: The concavity of the function.
+        """
         if len(self.fvars) == 0:
             return "Constant"
         diff2 = self.diffrentiate(order=2)
-        inflection_points = self.inflection_points()
         intervals = self.diffrentiate().intervals_of_increase_decreasing()
         print(intervals)
         concavity = {}
@@ -193,7 +252,6 @@ class Function:
 
     def asymptotes(self):
         """Calculate the asymptotes of the function."""
-
 
 
 if __name__ == "__main__":
@@ -220,12 +278,12 @@ if __name__ == "__main__":
     f1 = Function("sqrt(x)")
     #2
     print(f1.inflection_points())
-    print(f1.concavity())   
+    print(f1.concavity())
     print("------------------------------------------")
     f1 = Function("log(x)")
     #2
     print(f1.inflection_points())
-    print(f1.concavity())      
+    print(f1.concavity())
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[100, -100]))
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[1,2]))
     # print(f1.intervals_of_increase_decreasing(critical_points=f1.critical_points()))
