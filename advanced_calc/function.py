@@ -107,6 +107,9 @@ class Function:
             bool: True if the arguments are valid, False otherwise"""
         return len(fvars) <= 1
 
+    def slope(self, value):
+        """Calculate the slope of the function at a given value.
+        """
 
 if __name__ == "__main__":
     f1 = Function("ln(x)")
