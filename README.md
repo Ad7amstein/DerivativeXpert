@@ -62,8 +62,8 @@ calc = BasicCalculator("ln(E^2)+3")
 result = calc.evaluate()
 print(result)
 
-deriv = Derivative("x^2 + 3*x + 2")
-derivative_result = deriv.compute()
+func = Function("x^2 + 3*x + 2")
+derivative_result = func.differentiate()
 print(derivative_result)
 ```
 
