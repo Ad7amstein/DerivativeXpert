@@ -111,6 +111,34 @@ class Function:
         """Calculate the slope of the function at a given value.
         """
 
+    def critical_points(self, interval=None):
+        """Calculate the critical points of the function.
+        """
+
+    def extrema(self, interval=None):
+        """Calculate the extrema of the function.
+        """
+
+    def intervals_of_increase(self):
+        """Calculate the intervals of increase of the function.
+        """
+
+    def intervals_of_decrease(self):
+        """Calculate the intervals of decrease of the function.
+        """
+
+    def concavity(self, interval=None):
+        """Calculate the concavity of the function.
+        """
+
+    def inflection_points(self, interval=None):
+        """Calculate the inflection points of the function.
+        """
+
+    def asymptotes(self):
+        """Calculate the asymptotes of the function.
+        """
+
 if __name__ == "__main__":
     f1 = Function("ln(x)")
     print(f1.evaluate("E"))
