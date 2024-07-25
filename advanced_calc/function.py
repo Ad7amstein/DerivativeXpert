@@ -271,8 +271,9 @@ class Function:
                     f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], -oo)}",
                 ))
         return asymptotes
-    
+
     def plot(self):
+        """Plot the function."""
         from plot.plot import Plotter
         Plotter.plot(func= self)
 
@@ -280,38 +281,5 @@ class Function:
 
 
 if __name__ == "__main__":
-    f = Function("log(x)")
-    print(f.asymptotes())
-    # f1 = Function("3")
-    # #0
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print("------------------------------------------")
-    # f1 = Function("x")
-    # #0
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print("------------------------------------------")
-    # f1 = Function("x^2")
-    # #2
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print("------------------------------------------")
-    # f1 = Function("x^3")
-    # #6x
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print("------------------------------------------")
-    # f1 = Function("sqrt(x)")
-    # #2
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print("------------------------------------------")
-    # f1 = Function("log(x)")
-    # #2
-    # print(f1.inflection_points())
-    # print(f1.concavity())
-    # print(f1.extrema(critical_points=f1.critical_points(), interval=[100, -100]))
-    # print(f1.extrema(critical_points=f1.critical_points(), interval=[1,2]))
-    # print(f1.intervals_of_increase_decreasing(critical_points=f1.critical_points()))
-    # print(-999999999+oo)
+    f = Function("ln(x)")
+    print(f.evaluate(1))
