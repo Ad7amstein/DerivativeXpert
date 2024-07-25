@@ -62,9 +62,9 @@ class BasicCalculator:
         """
         return round(float(self.__expression.evalf()), 3)
 
-# pycodestyle path
-# black
-expr = "sin(pi)+cos(pi)+tan(pi/4)+asec(1)-sinh(pi)"
-calculator = BasicCalculator(expr)
-result = calculator.evaluate_expression()
-print(f"Result: {result}")
+
+if __name__ == "__main__":
+    expr = "sin(pi)+cos(pi)+tan(pi/4)+asec(1)-sinh(pi)"
+    calculator = BasicCalculator(expr)
+    result = calculator.evaluate_expression()
+    print(f"Result: {result}")
