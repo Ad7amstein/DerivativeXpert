@@ -1,8 +1,7 @@
 """A utility class to handle functions"""
 
-from sympy import sympify, simplify, solve, denom, oo
+from sympy import sympify, simplify, solve, denom, oo, limit
 from sympy.core.sympify import SympifyError
-
 
 
 class Function:
@@ -16,6 +15,7 @@ class Function:
             fvars (list): The arguments of the function
         """
         from advanced_calc.derivative import Derivative
+
         self.expression = expression
         self.fvars = self.__expression.free_symbols
         self.diff = Derivative()
@@ -23,7 +23,7 @@ class Function:
     @property
     def expression(self):
         """Get the expression of the function.
-        
+
         Returns:
             str: The expression of the function
         """
@@ -46,7 +46,7 @@ class Function:
     @property
     def fvars(self):
         """Get the arguments of the function.
-        
+
         Returns:
             list: The arguments of the function
         """
@@ -120,7 +120,7 @@ class Function:
         Args:
             order (int, optional): Order of differentiation. Defaults to 1.
             steps (bool, optional): Print the steps. Defaults to False.
-        
+
         Returns:
             Function: The derivative of the function.
         """
@@ -130,10 +130,10 @@ class Function:
 
     def slope(self, value):
         """Calculate the slope of the function at a given value.
-        
+
         Args:
             value (float): The value at which to calculate the slope.
-        
+
         Returns:
             float: The slope of the function at the given value.
         """
@@ -141,32 +141,33 @@ class Function:
 
     def critical_points(self, interval=None):
         """Calculate the critical points of the function.
-        
+
         Args:
             interval (list, optional): The interval to calculate the critical points.
             Defaults to None.
-        
+
         Returns:
             list: The critical points of the function.
         """
         if len(self.fvars) < 1:
             return None
         critical_points = []
-        if self.expression.is_rational_function():
-            denominator = denom(self.expression)
+        diff1 = self.diffrentiate()
+        if diff1.expression.is_rational_function():
+            denominator = denom(diff1.expression)
             critical_points = solve(denominator, self.fvars[0])
-        critical_points += solve(self.diffrentiate().expression, self.fvars[0])
+        critical_points += solve(diff1.expression, self.fvars[0])
         if not critical_points:
             return None
         return critical_points
 
     def extrema(self, interval=None):
         """Calculate the extrema of the function.
-        
+
         Args:
             interval (list, optional): The interval to calculate the extrema.
             Defaults to None.
-        
+
         Returns:
             tuple: The minimum and maximum values of the function.
         """
@@ -183,7 +184,7 @@ class Function:
 
     def intervals_of_increase_decreasing(self):
         """Calculate the intervals of increase of the function.
-        
+
         Returns:
             dict: The intervals of increase and decrease of the function.
         """
@@ -210,11 +211,11 @@ class Function:
 
     def inflection_points(self, interval=None):
         """Calculate the inflection points of the function.
-        
+
         Args:
             interval (list, optional): The interval to calculate the inflection points.
             Defaults to None.
-        
+
         Returns:
             list: The inflection points of the function.
         """
@@ -222,11 +223,11 @@ class Function:
 
     def concavity(self, interval=None):
         """Calculate the concavity of the function.
-        
+
         Args:
             interval (list, optional): The interval to calculate the concavity.
             Defaults to None.
-        
+
         Returns:
             dict: The concavity of the function.
         """
@@ -236,7 +237,7 @@ class Function:
         intervals = self.diffrentiate().intervals_of_increase_decreasing()
         print(intervals)
         concavity = {}
-        for (key, value) in intervals.items():
+        for key, value in intervals.items():
             if key == "Increasing":
                 concavity["Concave Up"] = value
             elif key == "Decreasing":
@@ -252,9 +253,29 @@ class Function:
 
     def asymptotes(self):
         """Calculate the asymptotes of the function."""
+        asymptotes = {}
+        critical_pts = self.critical_points()
+        if critical_pts:
+            for cr_point in critical_pts:
+                asymptotes["vertical_asymptotes"] = (
+                    f"{self.fvars[0]} -> {cr_point}",
+                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], cr_point)}",
+                )
+
+        asymptotes["horizontal_asymptote"] = [(
+                    f"{self.fvars[0]} -> {oo}",
+                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], oo)}",
+                )]
+        asymptotes["horizontal_asymptote"].append((
+                    f"{self.fvars[0]} -> {-oo}",
+                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], -oo)}",
+                ))
+        return asymptotes
 
 
 if __name__ == "__main__":
+    f = Function("log(x)")
+    print(f.asymptotes())
     # f1 = Function("3")
     # #0
     # print(f1.inflection_points())
@@ -274,16 +295,16 @@ if __name__ == "__main__":
     # #6x
     # print(f1.inflection_points())
     # print(f1.concavity())
-    print("------------------------------------------")
-    f1 = Function("sqrt(x)")
-    #2
-    print(f1.inflection_points())
-    print(f1.concavity())
-    print("------------------------------------------")
-    f1 = Function("log(x)")
-    #2
-    print(f1.inflection_points())
-    print(f1.concavity())
+    # print("------------------------------------------")
+    # f1 = Function("sqrt(x)")
+    # #2
+    # print(f1.inflection_points())
+    # print(f1.concavity())
+    # print("------------------------------------------")
+    # f1 = Function("log(x)")
+    # #2
+    # print(f1.inflection_points())
+    # print(f1.concavity())
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[100, -100]))
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[1,2]))
     # print(f1.intervals_of_increase_decreasing(critical_points=f1.critical_points()))
