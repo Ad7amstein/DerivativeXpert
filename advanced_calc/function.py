@@ -278,8 +278,6 @@ class Function:
         Plotter.plot(func= self)
 
 
-
-
 if __name__ == "__main__":
     f = Function("ln(x)")
     print(f.evaluate(1))
