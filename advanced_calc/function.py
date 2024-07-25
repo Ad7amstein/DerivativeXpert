@@ -127,8 +127,9 @@ class Function:
             return None
         return critical_points
 
-    def extrema(self, critical_points=None, interval=None):
+    def extrema(self, interval=None):
         """Calculate the extrema of the function."""
+        critical_points = self.critical_points()
         start = interval[0]
         end = interval[1]
         values = [self.evaluate(start), self.evaluate(end)]
@@ -139,8 +140,9 @@ class Function:
         mn, mx = min(values), max(values)
         return mn, mx
 
-    def intervals_of_increase_decreasing(self, critical_points=None):
+    def intervals_of_increase_decreasing(self):
         """Calculate the intervals of increase of the function."""
+        critical_points = self.critical_points()
         if critical_points is None:
             if len(self.fvars) < 1:
                 return {"Constant": [[-oo, oo]]}
@@ -163,6 +165,7 @@ class Function:
 
     def inflection_points(self, interval=None):
         """Calculate the inflection points of the function."""
+        # print(self.diffrentiate().critical_points())
         return self.diffrentiate().critical_points()
 
     def concavity(self, interval=None):
@@ -171,7 +174,8 @@ class Function:
             return "Constant"
         diff2 = self.diffrentiate(order=2)
         inflection_points = self.inflection_points()
-        intervals = self.intervals_of_increase_decreasing(critical_points=inflection_points)
+        intervals = self.diffrentiate().intervals_of_increase_decreasing()
+        print(intervals)
         concavity = {}
         for (key, value) in intervals.items():
             if key == "Increasing":
@@ -191,22 +195,37 @@ class Function:
         """Calculate the asymptotes of the function."""
 
 
+
 if __name__ == "__main__":
-    f1 = Function("3")
-    print(f1.inflection_points())
-    print(f1.concavity())
+    # f1 = Function("3")
+    # #0
+    # print(f1.inflection_points())
+    # print(f1.concavity())
+    # print("------------------------------------------")
+    # f1 = Function("x")
+    # #0
+    # print(f1.inflection_points())
+    # print(f1.concavity())
+    # print("------------------------------------------")
+    # f1 = Function("x^2")
+    # #2
+    # print(f1.inflection_points())
+    # print(f1.concavity())
+    # print("------------------------------------------")
+    # f1 = Function("x^3")
+    # #6x
+    # print(f1.inflection_points())
+    # print(f1.concavity())
     print("------------------------------------------")
-    f1 = Function("x")
+    f1 = Function("sqrt(x)")
+    #2
     print(f1.inflection_points())
-    print(f1.concavity())
+    print(f1.concavity())   
     print("------------------------------------------")
-    f1 = Function("x^2")
+    f1 = Function("log(x)")
+    #2
     print(f1.inflection_points())
-    print(f1.concavity())
-    print("------------------------------------------")
-    f1 = Function("x^3")
-    print(f1.inflection_points())
-    print(f1.concavity())
+    print(f1.concavity())      
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[100, -100]))
     # print(f1.extrema(critical_points=f1.critical_points(), interval=[1,2]))
     # print(f1.intervals_of_increase_decreasing(critical_points=f1.critical_points()))
