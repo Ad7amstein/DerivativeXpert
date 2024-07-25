@@ -1,7 +1,8 @@
 """A utility class to handle functions"""
 
-from sympy import sympify, simplify
+from sympy import sympify, simplify, solve, denom, oo
 from sympy.core.sympify import SympifyError
+from advanced_calc.derivative import Derivative
 
 
 class Function:
@@ -16,6 +17,7 @@ class Function:
         """
         self.expression = expression
         self.fvars = self.__expression.free_symbols
+        self.diff = Derivative()
 
     @property
     def expression(self):
@@ -73,15 +75,10 @@ class Function:
             raise ValueError("Invalid value") from exc
 
         if len(self.fvars) == 0:
-            return round(
-                float(simplify(self.__expression).evalf()),
-                3
-            )
+            return round(float(simplify(self.__expression).evalf()), 3)
 
         return round(
-            float(simplify(self.__expression).subs(
-                {self.__fvars[0]: value}).evalf()),
-            3
+            float(simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
         )
 
     @staticmethod
@@ -107,37 +104,67 @@ class Function:
             bool: True if the arguments are valid, False otherwise"""
         return len(fvars) <= 1
 
+    def diffrentiate(self, order=1, steps=False):
+        return Function(
+            str(self.diff.diffrentiate(function=self, order=1, steps=False))
+        )
+
     def slope(self, value):
-        """Calculate the slope of the function at a given value.
-        """
+        """Calculate the slope of the function at a given value."""
+        return self.diffrentiate().evaluate(value)
 
     def critical_points(self, interval=None):
-        """Calculate the critical points of the function.
-        """
+        """Calculate the critical points of the function."""
+        critical_points = []
+        if self.expression.is_rational_function():
+            denominator = denom(self.expression)
+            critical_points = solve(denominator, self.fvars[0])
+        critical_points += solve(self.diff.diffrentiate(), self.fvars[0])
 
-    def extrema(self, interval=None):
-        """Calculate the extrema of the function.
-        """
+        if not critical_points:
+            return None
+        return critical_points
 
-    def intervals_of_increase(self):
-        """Calculate the intervals of increase of the function.
-        """
+    def extrema(self, critical_points=None, interval=None):
+        """Calculate the extrema of the function."""
+        start = interval[0]
+        end = interval[1]
+        values = [self.evaluate(start), self.evaluate(end)]
+        for i in critical_points:
+            if end >= i >= start:
+                values.append(self.evaluate(i))
+        mn, mx = min(values), max(values)
+        return mn, mx
 
-    def intervals_of_decrease(self):
-        """Calculate the intervals of decrease of the function.
-        """
+    def intervals_of_increase(self, critical_points=None):
+        """Calculate the intervals of increase of the function."""
+        critical_points.append(oo)
+        signs = {}
+        prv = -oo
+        for cr_point in critical_points:
+            signs[
+                (
+                    "Increasing"
+                    if self.evaluate((prv + cr_point) / 2) > 0
+                    else "Decreasing"
+                )
+            ] = [[prv, cr_point]]
+            prv = cr_point
+
+        print(signs)
+
+    def intervals_of_decrease(self, critical_points=None):
+        """Calculate the intervals of decrease of the function."""
 
     def concavity(self, interval=None):
-        """Calculate the concavity of the function.
-        """
+        """Calculate the concavity of the function."""
 
     def inflection_points(self, interval=None):
-        """Calculate the inflection points of the function.
-        """
+        """Calculate the inflection points of the function."""
 
     def asymptotes(self):
-        """Calculate the asymptotes of the function.
-        """
+        """Calculate the asymptotes of the function."""
+
 
 if __name__ == "__main__":
     f1 = Function("ln(x)")
