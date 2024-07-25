@@ -80,7 +80,7 @@ class Function:
         """
         try:
             value = float(simplify(value).evalf())
-        except ValueError as exc:
+        except (ValueError, TypeError) as exc:
             raise ValueError("Invalid value") from exc
 
         if len(self.fvars) == 0:
@@ -271,6 +271,12 @@ class Function:
                     f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], -oo)}",
                 ))
         return asymptotes
+    
+    def plot(self):
+        from plot.plot import Plotter
+        Plotter.plot(func= self)
+
+
 
 
 if __name__ == "__main__":
