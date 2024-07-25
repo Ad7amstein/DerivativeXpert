@@ -69,8 +69,9 @@ print(derivative_result)
 
 ## Testing
 
-```sh
 To run the tests, use the unittest framework:
+
+```sh
 python -m unittest discover tests
 ```
 
