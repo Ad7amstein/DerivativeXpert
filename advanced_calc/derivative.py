@@ -31,6 +31,7 @@ class Derivative:
         """
         if function:
             self.function = function
+        symb = "x"
         if len(self.function.fvars) > 0:
             symb = self.function.fvars[0]
         end = order
