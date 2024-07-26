@@ -52,7 +52,7 @@ You can also import and use the modules directly in your own scripts:
 
 ```py
 from basic_calculator.basic_calc import BasicCalculator
-from advanced_calc.derivative import Derivative
+from advanced_calc.function import Function
 ```
 
 ### Example usage
