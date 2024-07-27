@@ -5,7 +5,9 @@
 [![GitHub forks](https://img.shields.io/github/forks/Ad7amstein/DerivativeXpert.svg?style=flat&label=Fork)](https://github.com/Ad7amstein/DerivativeXpert/network/)
 [![GitHub stars](https://img.shields.io/github/stars/Ad7amstein/DerivativeXpert.svg?style=flat&label=Star)](https://github.com/Ad7amstein/DerivativeXpert/stargazers/)
 
-The ultimate tool for basic and advanced calculus, including plotting, derivatives, limits, and more.
+<p align="center">
+🧮 The ultimate tool for basic and advanced calculus, including plotting, derivatives, limits, and more.
+</p>
 
 ---
 
