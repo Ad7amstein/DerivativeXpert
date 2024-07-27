@@ -1,4 +1,4 @@
-# DerivativeXpert
+<h1 align="center">DerivativeXpert</h1>
 
 [![License](https://img.shields.io/github/license/Ad7amstein/DerivativeXpert.svg?style=sflat&label=License&color=blue)](https://github.com/Ad7amstein/DerivativeXpert/license/)
 [![GitHub watchers](https://img.shields.io/github/watchers/Ad7amstein/DerivativeXpert.svg?style=flat&label=Watch)](https://github.com/Ad7amstein/DerivativeXpert/watchers/)
