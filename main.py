@@ -64,14 +64,20 @@ def advanced_calculator():
                 continue
             print(pretty(function.diffrentiate(order=order).expression))
         elif choice == "3":
-            function.plot()
+            try:
+                function.plot()
+            except ValueError as e:
+                print(str(e))
         elif choice == "4":
             try:
                 order = int(input("Enter the order of derivative you want to plot: "))
             except ValueError:
                 print("Invalid order, please enter correct number.")
                 continue
-            function.diffrentiate(order=order).plot()
+            try:
+                function.diffrentiate(order=order).plot()
+            except ValueError as e:
+                print(str(e))
         elif choice == "5":
             point = input("Enter the point(x): ")
             try:
