@@ -1,41 +1,47 @@
 """A module to plot a function."""
 
-from advanced_calc.function import Function
 import sympy as sp
-from sympy.abc import x
+from advanced_calc.function import Function
 
 
 class Plotter:
     """A class to plot a function."""
 
-    def __init__(self, func):
-        """Initialize the class.
-
-        Args:
-            function (str): The function to plot.
-        """
-        self.function = func
+    def __init__(self):
+        """Initialize the class."""
 
     @staticmethod
-    def plot(instance=None, func=None):
+    def plot(func):
         """Plot the function.
-        
-        Args:
-            instance (Plotter): The instance of the class.
-            func (Function): The function to plot.
+
+        Parameters
+        ==========
+            func : `Function`
+                The function to plot.
+
+        Raises
+        ======
+            ValueError:
+                If the function is not provided.
+                If the function is not an instance of Function.
         """
-        if not func and not instance.function:
+        if not func or not func.expression:
             raise ValueError("No function to plot.")
-        if not func:
-            func = instance.function
+        if not isinstance(func, Function):
+            raise ValueError("The function must be an instance of Function.")
 
         fun_str = str(func.expression)
+        x = sp.Symbol("x")
+        try:
+            symb = func.fvars[0]
+        except IndexError:
+            symb = x
         sp.plot(
             func.expression,
-            (x, -100, 100),
-            title=f"Plot of $f(x) = {fun_str}$",
-            xlabel="$x$",
-            ylabel="$f(x)$",
+            (symb, -100, 100),
+            title=f"Plot of $f({symb}) = {fun_str}$",
+            xlabel=f"${symb}$",
+            ylabel=f"$f({symb})$",
             line_color="blue",
             show=True,
         )
@@ -43,6 +49,4 @@ class Plotter:
 
 if __name__ == "__main__":
     function = Function("x^2")
-    plt = Plotter(function)
-    Plotter.plot(plt)
-    Plotter.plot(plt)
+    Plotter.plot(function)
