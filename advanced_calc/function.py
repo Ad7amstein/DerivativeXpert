@@ -8,11 +8,14 @@ class Function:
     """A class to handle functions"""
 
     def __init__(self, expression):
-        """Initialize the function with an expression
+        """Initialize the function with an expression.
 
-        Args:
-            expression (str): The expression of the function
-            fvars (list): The arguments of the function
+        Parameters
+        ==========
+            expression : `str`
+                The expression of the function
+            fvars : `list`
+                The arguments of the function
         """
         from advanced_calc.derivative import Derivative
 
@@ -24,20 +27,25 @@ class Function:
     def expression(self):
         """Get the expression of the function.
 
-        Returns:
+        Returns
+        =======
             str: The expression of the function
         """
         return self.__expression
 
     @expression.setter
     def expression(self, expression):
-        """Set the expression of the function
+        """Set the expression of the function.
 
-        Args:
-            expression (str): The expression of the function
+        Parameters
+        ==========
+            expression : `str`
+                The expression of the function
 
-        Raises:
-            ValueError: If the expression is invalid
+        Raises
+        ======
+            ValueError
+                If the expression is invalid
         """
         if not self.is_valid_expression(expression):
             raise ValueError("Invalid expression")
@@ -47,8 +55,10 @@ class Function:
     def fvars(self):
         """Get the arguments of the function.
 
-        Returns:
-            list: The arguments of the function
+        Returns
+        =======
+            list
+                The arguments of the function
         """
         return self.__fvars
 
@@ -56,27 +66,37 @@ class Function:
     def fvars(self, fvars):
         """Set the arguments of the function
 
-        Args:
-            fvars (list): The arguments of the function
+        Parameters
+        ==========
+            fvars : `list`
+                The arguments of the function
 
-        Raises:
-            ValueError: If the arguments are invalid
+        Raises
+        ======
+            ValueError
+                If the arguments are invalid
         """
         if not self.is_valid_vars(fvars):
             raise ValueError("Invalid number of arguments")
         self.__fvars = list(fvars)
 
     def evaluate(self, value):
-        """Evaluate the function at a given value
+        """Evaluate the function at a given value.
 
-        Args:
-            value (float): The value to evaluate the function at
+        Parameters
+        ==========
+            value : `float`
+                The value to evaluate the function at
 
-        Returns:
-            float: The value of the function at the given value
+        Returns
+        =======
+            float
+                The value of the function at the given value
 
-        Raises:
-            ValueError: If the value is invalid
+        Raises
+        ======
+            ValueError
+                If the value is invalid
         """
         try:
             value = float(simplify(value).evalf())
@@ -95,11 +115,16 @@ class Function:
 
     @staticmethod
     def is_valid_expression(expression):
-        """Check if the expression is valid
-        Args:
+        """Check if the expression is valid.
+
+        Parameters
+        ==========
             expression (str): The expression of the function
-        Returns:
-            bool: True if the expression is valid, False otherwise
+
+        Returns
+        =======
+            bool
+                True if the expression is valid, False otherwise
         """
         try:
             sympify(expression)
@@ -109,23 +134,34 @@ class Function:
 
     @staticmethod
     def is_valid_vars(fvars):
-        """Check if the arguments are valid
-        Args:
-            args (list): The arguments of the function
-        Returns:
-            bool: True if the arguments are valid, False otherwise
+        """Check if the arguments are valid.
+
+        Parameters
+        ==========
+            args : `list`
+                The arguments of the function
+
+        Returns
+        =======
+            bool
+                True if the arguments are valid, False otherwise
         """
         return len(fvars) <= 1
 
     def diffrentiate(self, order=1, steps=False):
         """Differentiate the function.
 
-        Args:
-            order (int, optional): Order of differentiation. Defaults to 1.
-            steps (bool, optional): Print the steps. Defaults to False.
+        Parameters
+        ==========
+            order : `int`, `optional`
+                Order of differentiation. Defaults to 1.
+            steps : `bool`, `optional`
+                Print the steps. Defaults to False.
 
-        Returns:
-            Function: The derivative of the function.
+        Returns
+        =======
+            Function
+                The derivative of the function.
         """
         return Function(
             str(self.diff.diffrentiate(function=self, order=order, steps=steps))
@@ -134,23 +170,31 @@ class Function:
     def slope(self, value):
         """Calculate the slope of the function at a given value.
 
-        Args:
-            value (float): The value at which to calculate the slope.
+        Parameters
+        ==========
+            value : `float`
+                The value at which to calculate the slope.
 
-        Returns:
-            float: The slope of the function at the given value.
+        Returns
+        =======
+            float
+                The slope of the function at the given value.
         """
         return self.diffrentiate().evaluate(value)
 
     def critical_points(self, interval=None):
         """Calculate the critical points of the function.
 
-        Args:
-            interval (list, optional): The interval to calculate the critical points.
-            Defaults to None.
+        Parameters
+        ==========
+            interval : `list`, `optional`
+                The interval to calculate the critical points.
+                Defaults to None.
 
-        Returns:
-            list: The critical points of the function.
+        Returns
+        =======
+            list
+                The critical points of the function.
         """
         if len(self.fvars) < 1:
             return None
@@ -167,12 +211,16 @@ class Function:
     def extrema(self, interval=None):
         """Calculate the extrema of the function.
 
-        Args:
-            interval (list, optional): The interval to calculate the extrema.
-            Defaults to None.
+        Parameters
+        ==========
+            interval : `list`, `optional`
+                The interval to calculate the extrema.
+                Defaults to None.
 
-        Returns:
-            tuple: The minimum and maximum values of the function.
+        Returns
+        =======
+            tuple
+                The minimum and maximum values of the function.
         """
         critical_points = self.critical_points()
         start = interval[0]
@@ -188,8 +236,10 @@ class Function:
     def intervals_of_increase_decreasing(self):
         """Calculate the intervals of increase of the function.
 
-        Returns:
-            dict: The intervals of increase and decrease of the function.
+        Returns
+        =======
+            dict
+                The intervals of increase and decrease of the function.
         """
         critical_points = self.critical_points()
         if critical_points is None:
@@ -216,24 +266,31 @@ class Function:
     def inflection_points(self, interval=None):
         """Calculate the inflection points of the function.
 
-        Args:
-            interval (list, optional): The interval to calculate the inflection points.
-            Defaults to None.
+        Parameters:
+            interval : `list`, `optional`
+                The interval to calculate the inflection points.
+                Defaults to None.
 
-        Returns:
-            list: The inflection points of the function.
+        Returns
+        =======
+            list
+                The inflection points of the function.
         """
         return self.diffrentiate().critical_points()
 
     def concavity(self, interval=None):
         """Calculate the concavity of the function.
 
-        Args:
-            interval (list, optional): The interval to calculate the concavity.
-            Defaults to None.
+        Parameters
+        ==========
+            interval : `list`, `optional`
+                The interval to calculate the concavity.
+                Defaults to None.
 
-        Returns:
-            dict: The concavity of the function.
+        Returns
+        =======
+            dict
+                The concavity of the function.
         """
         if len(self.fvars) == 0:
             return "Constant"
