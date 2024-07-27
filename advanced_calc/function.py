@@ -1,8 +1,8 @@
 """A utility class to handle functions"""
 
+from heapq import merge
 import sympy as sp
 from sympy.core.sympify import SympifyError
-from heapq import merge
 from sympy.calculus.util import continuous_domain, function_range
 
 

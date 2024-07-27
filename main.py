@@ -1,9 +1,9 @@
 """Main program for DerivativeXpert."""
 
 import sys
+from sympy import pretty
 from basic_calculator.basic_calc import BasicCalculator
 from advanced_calc.function import Function
-from sympy import pretty
 
 
 def basic_calculator():
