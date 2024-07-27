@@ -86,9 +86,12 @@ class Function:
         if len(self.fvars) == 0:
             return round(float(simplify(self.__expression).evalf()), 3)
 
-        return round(
-            float(simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
-        )
+        try:
+            return round(
+                float(simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
+            )
+        except TypeError as exc:
+            raise TypeError("Function is not defined at this point") from exc
 
     @staticmethod
     def is_valid_expression(expression):
@@ -192,7 +195,8 @@ class Function:
         if critical_points is None:
             if len(self.fvars) < 1:
                 return {"Constant": [[-oo, oo]]}
-            critical_points = [oo]
+            return {"Increasing" if self.diffrentiate().evaluate(0) > 0 else
+                    "Decreasing": [[-oo, oo]]}
         else:
             critical_points.append(oo)
         signs = {}
@@ -261,7 +265,6 @@ class Function:
                     f"{self.fvars[0]} -> {cr_point}",
                     f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], cr_point)}",
                 )
-
         asymptotes["horizontal_asymptote"] = [(
                     f"{self.fvars[0]} -> {oo}",
                     f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], oo)}",
