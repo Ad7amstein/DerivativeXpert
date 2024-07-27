@@ -3,6 +3,7 @@
 import sys
 from basic_calculator.basic_calc import BasicCalculator
 from advanced_calc.function import Function
+from sympy import pretty
 
 
 def basic_calculator():
@@ -16,7 +17,7 @@ def basic_calculator():
         except ValueError as e:
             print(f"oooopppps, {str(e)}")
             continue
-        print(basic_calc.evaluate_expression())
+        print(pretty(basic_calc.evaluate_expression()))
 
 
 def advanced_calculator():
@@ -53,19 +54,23 @@ def advanced_calculator():
                 print(function.evaluate(x))
             except ValueError as e:
                 print(str(e))
+            except TypeError as e:
+                print(str(e))
         elif choice == "2":
             try:
                 order = int(input("Enter the order of derivative you want: "))
             except ValueError:
-                print("Invalid number, please enter correct number.")
-            print(function.diffrentiate(order=order).expression)
+                print("Invalid order, Please enter correct number.")
+                continue
+            print(pretty(function.diffrentiate(order=order).expression))
         elif choice == "3":
             function.plot()
         elif choice == "4":
             try:
                 order = int(input("Enter the order of derivative you want to plot: "))
             except ValueError:
-                print("Invalid number, please enter correct number.")
+                print("Invalid order, please enter correct number.")
+                continue
             function.diffrentiate(order=order).plot()
         elif choice == "5":
             point = input("Enter the point(x): ")
@@ -82,7 +87,7 @@ def advanced_calculator():
         elif choice == "7":
             print(
                 "Interval of increasing and decreasing: ",
-                function.intervals_of_increase_decreasing(),
+                pretty(function.intervals_of_increase_decreasing()),
             )
         elif choice == "8":
             inflection_points = function.inflection_points()
@@ -91,9 +96,9 @@ def advanced_calculator():
             else:
                 print("Inflection points: ", inflection_points)
         elif choice == "9":
-            print("Concavity: ", function.concavity())
+            print("Concavity: ", pretty(function.concavity()))
         elif choice == "10":
-            print("Asymptotes: ", function.asymptotes())
+            print("Asymptotes: ", pretty(function.asymptotes()))
         elif choice.lower() == "m":
             return
         else:
