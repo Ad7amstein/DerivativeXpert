@@ -1,6 +1,6 @@
 """A utility class to handle functions"""
 
-from sympy import sympify, simplify, solve, denom, oo, limit
+import sympy as sp
 from sympy.core.sympify import SympifyError
 
 
@@ -49,7 +49,7 @@ class Function:
         """
         if not self.is_valid_expression(expression):
             raise ValueError("Invalid expression")
-        self.__expression = sympify(expression)
+        self.__expression = sp.sympify(expression)
 
     @property
     def fvars(self):
@@ -99,16 +99,16 @@ class Function:
                 If the value is invalid
         """
         try:
-            value = float(simplify(value).evalf())
+            value = float(sp.simplify(value).evalf())
         except (ValueError, TypeError) as exc:
             raise ValueError("Invalid value") from exc
 
         if len(self.fvars) == 0:
-            return round(float(simplify(self.__expression).evalf()), 3)
+            return round(float(sp.simplify(self.__expression).evalf()), 3)
 
         try:
             return round(
-                float(simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
+                float(sp.simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
             )
         except TypeError as exc:
             raise TypeError("Function is not defined at this point") from exc
@@ -127,7 +127,7 @@ class Function:
                 True if the expression is valid, False otherwise
         """
         try:
-            sympify(expression)
+            sp.sympify(expression)
         except (SympifyError, TypeError):
             return False
         return True
@@ -201,9 +201,9 @@ class Function:
         critical_points = []
         diff1 = self.diffrentiate()
         if diff1.expression.is_rational_function():
-            denominator = denom(diff1.expression)
-            critical_points = solve(denominator, self.fvars[0])
-        critical_points += solve(diff1.expression, self.fvars[0])
+            denominator = sp.denom(diff1.expression)
+            critical_points = sp.solve(denominator, self.fvars[0])
+        critical_points += sp.solve(diff1.expression, self.fvars[0])
         if not critical_points:
             return None
         return critical_points
@@ -244,13 +244,13 @@ class Function:
         critical_points = self.critical_points()
         if critical_points is None:
             if len(self.fvars) < 1:
-                return {"Constant": [[-oo, oo]]}
+                return {"Constant": [[-sp.oo, sp.oo]]}
             return {"Increasing" if self.diffrentiate().evaluate(0) > 0 else
-                    "Decreasing": [[-oo, oo]]}
+                    "Decreasing": [[-sp.oo, sp.oo]]}
         else:
-            critical_points.append(oo)
+            critical_points.append(sp.oo)
         signs = {}
-        prv = -oo
+        prv = -sp.oo
         for cr_point in critical_points:
             signs[
                 (
@@ -320,15 +320,15 @@ class Function:
             for cr_point in critical_pts:
                 asymptotes["vertical_asymptotes"] = (
                     f"{self.fvars[0]} -> {cr_point}",
-                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], cr_point)}",
+                    f"f({self.fvars[0]}) -> {sp.limit(self.expression, self.fvars[0], cr_point)}",
                 )
         asymptotes["horizontal_asymptote"] = [(
-                    f"{self.fvars[0]} -> {oo}",
-                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], oo)}",
+                    f"{self.fvars[0]} -> {sp.oo}",
+                    f"f({self.fvars[0]}) -> {sp.limit(self.expression, self.fvars[0], sp.oo)}",
                 )]
         asymptotes["horizontal_asymptote"].append((
-                    f"{self.fvars[0]} -> {-oo}",
-                    f"f({self.fvars[0]}) -> {limit(self.expression, self.fvars[0], -oo)}",
+                    f"{self.fvars[0]} -> {-sp.oo}",
+                    f"f({self.fvars[0]}) -> {sp.limit(self.expression, self.fvars[0], -sp.oo)}",
                 ))
         return asymptotes
 
