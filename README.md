@@ -1,9 +1,9 @@
 # DerivativeXpert
 
-[![License](https://img.shields.io/github/license/Ad7amstein/DerivativeXpert.svg?style=social&label=License)](https://github.com/Ad7amstein/DerivativeXpert/license/)
-[![GitHub watchers](https://img.shields.io/github/watchers/Ad7amstein/DerivativeXpert.svg?style=social&label=Watch)](https://github.com/Ad7amstein/DerivativeXpert/watchers/)
-[![GitHub forks](https://img.shields.io/github/forks/Ad7amstein/DerivativeXpert.svg?style=social&label=Fork)](https://github.com/Ad7amstein/DerivativeXpert/network/)
-[![GitHub stars](https://img.shields.io/github/stars/Ad7amstein/DerivativeXpert.svg?style=social&label=Star)](https://github.com/Ad7amstein/DerivativeXpert/stargazers/)
+[![License](https://img.shields.io/github/license/Ad7amstein/DerivativeXpert.svg?style=sflat&label=License&color=blue)](https://github.com/Ad7amstein/DerivativeXpert/license/)
+[![GitHub watchers](https://img.shields.io/github/watchers/Ad7amstein/DerivativeXpert.svg?style=flat&label=Watch)](https://github.com/Ad7amstein/DerivativeXpert/watchers/)
+[![GitHub forks](https://img.shields.io/github/forks/Ad7amstein/DerivativeXpert.svg?style=flat&label=Fork)](https://github.com/Ad7amstein/DerivativeXpert/network/)
+[![GitHub stars](https://img.shields.io/github/stars/Ad7amstein/DerivativeXpert.svg?style=flat&label=Star)](https://github.com/Ad7amstein/DerivativeXpert/stargazers/)
 
 The ultimate tool for basic and advanced calculus, including plotting, derivatives, limits, and more.
 
