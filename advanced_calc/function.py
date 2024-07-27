@@ -2,6 +2,8 @@
 
 import sympy as sp
 from sympy.core.sympify import SympifyError
+from heapq import merge
+from sympy.calculus.util import continuous_domain, function_range
 
 
 class Function:
@@ -22,6 +24,14 @@ class Function:
         self.expression = expression
         self.fvars = self.__expression.free_symbols
         self.diff = Derivative()
+        self.range = function_range(
+            self.__expression, sp.Symbol("x")
+            if len(self.fvars) == 0
+            else self.fvars[0], sp.S.Reals)
+        self.domain = continuous_domain(
+            self.__expression, sp.Symbol("x")
+            if len(self.fvars) == 0
+            else self.fvars[0], sp.S.Reals)
 
     @property
     def expression(self):
@@ -80,6 +90,50 @@ class Function:
             raise ValueError("Invalid number of arguments")
         self.__fvars = list(fvars)
 
+    @property
+    def range(self):
+        """Get the range of the function.
+
+        Returns
+        =======
+            Interval
+                The range of the function
+        """
+        return self.__range
+
+    @range.setter
+    def range(self, rng):
+        """Set the range of the function.
+
+        Parameters
+        ==========
+            rng : `Interval`
+                The range of the function
+        """
+        self.__range = rng
+
+    @property
+    def domain(self):
+        """Get the domain of the function.
+
+        Returns
+        =======
+            Interval:
+                The domain of the function
+        """
+        return self.__domain
+
+    @domain.setter
+    def domain(self, domain):
+        """Set the domain of the function.
+
+        Parameters
+        ==========
+            expression : Interval
+                The domain of the function
+        """
+        self.__domain = domain
+
     def evaluate(self, value):
         """Evaluate the function at a given value.
 
@@ -102,16 +156,15 @@ class Function:
             value = float(sp.simplify(value).evalf())
         except (ValueError, TypeError) as exc:
             raise ValueError("Invalid value") from exc
+        if value not in self.domain:
+            raise ValueError("Value is not in the domain of the function")
 
         if len(self.fvars) == 0:
             return round(float(sp.simplify(self.__expression).evalf()), 3)
 
-        try:
-            return round(
-                float(sp.simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
-            )
-        except TypeError as exc:
-            raise TypeError("Function is not defined at this point") from exc
+        return round(
+            float(sp.simplify(self.__expression).subs({self.__fvars[0]: value}).evalf()), 3
+        )
 
     @staticmethod
     def is_valid_expression(expression):
@@ -197,15 +250,20 @@ class Function:
                 The critical points of the function.
         """
         if len(self.fvars) < 1:
-            return None
+            return []
+        if not interval:
+            interval = self.domain
         critical_points = []
-        diff1 = self.diffrentiate()
-        if diff1.expression.is_rational_function():
-            denominator = sp.denom(diff1.expression)
-            critical_points = sp.solve(denominator, self.fvars[0])
-        critical_points += sp.solve(diff1.expression, self.fvars[0])
-        if not critical_points:
-            return None
+        critical_points += sp.singularities(
+            self.expression,
+            self.fvars[0],
+            domain=interval
+            )
+        critical_points += sp.solveset(
+            self.diffrentiate().expression,
+            self.fvars[0],
+            domain=interval
+            )
         return critical_points
 
     def extrema(self, interval=None):
@@ -222,18 +280,14 @@ class Function:
             tuple
                 The minimum and maximum values of the function.
         """
-        critical_points = self.critical_points()
-        start = interval[0]
-        end = interval[1]
-        values = [self.evaluate(start), self.evaluate(end)]
-        if critical_points:
-            for i in critical_points:
-                if end >= i >= start:
-                    values.append(self.evaluate(i))
-        mn, mx = min(values), max(values)
-        return mn, mx
+        if not interval:
+            interval = self.domain
+        symb = sp.Symbol("x") if len(self.fvars) == 0 else self.fvars[0]
+        mx = sp.maximum(self.expression, symb, interval)
+        mn = sp.minimum(self.expression, symb, interval)
+        return mx, mn
 
-    def intervals_of_increase_decreasing(self):
+    def intervals_of_increase_decreasing(self, interval=None):
         """Calculate the intervals of increase of the function.
 
         Returns
@@ -241,25 +295,29 @@ class Function:
             dict
                 The intervals of increase and decrease of the function.
         """
-        critical_points = self.critical_points()
-        if critical_points is None:
-            if len(self.fvars) < 1:
-                return {"Constant": [[-sp.oo, sp.oo]]}
-            return {"Increasing" if self.diffrentiate().evaluate(0) > 0 else
-                    "Decreasing": [[-sp.oo, sp.oo]]}
+        symb = sp.Symbol("x") if len(self.fvars) == 0 else self.fvars[0]
+        critical_points = self.critical_points(interval=interval)
+        interval_points = []
+        if not interval:
+            interval = self.domain
+        if isinstance(interval, sp.Union):
+            for interval in interval.args:
+                interval_points.append(interval.start)
+                interval_points.append(interval.end)
         else:
-            critical_points.append(sp.oo)
-        signs = {}
-        prv = -sp.oo
-        for cr_point in critical_points:
-            signs[
-                (
-                    "Increasing"
-                    if self.diffrentiate().evaluate((prv + cr_point) / 2) > 0
-                    else "Decreasing"
-                )
-            ] = [[prv, cr_point]]
-            prv = cr_point
+            interval_points = [interval.start, interval.end]
+        interval_points = sorted(list(set(merge(critical_points, interval_points))))
+
+        signs = {"Constant":[],"Increasing" : [], "Decreasing":[]}
+        for i in range(1, len(interval_points)):
+            if sp.is_strictly_increasing(self.expression, interval=sp.Interval(
+                interval_points[i - 1]+1, interval_points[i]-1), symbol=symb):
+                signs["Increasing"] += [interval_points[i - 1], interval_points[i]]
+            elif sp.is_strictly_decreasing(self.expression, interval=sp.Interval(
+                interval_points[i - 1]+1, interval_points[i]-1), symbol=symb):
+                signs["Decreasing"] += [interval_points[i - 1], interval_points[i]]
+            else:
+                signs["Constant"] += [[interval_points[i - 1], interval_points[i]]]
 
         return signs
 
@@ -276,7 +334,9 @@ class Function:
             list
                 The inflection points of the function.
         """
-        return self.diffrentiate().critical_points()
+        if not interval:
+            interval = self.domain
+        return self.diffrentiate().critical_points(interval=interval)
 
     def concavity(self, interval=None):
         """Calculate the concavity of the function.
@@ -293,34 +353,31 @@ class Function:
                 The concavity of the function.
         """
         if len(self.fvars) == 0:
-            return "Constant"
-        diff2 = self.diffrentiate(order=2)
-        intervals = self.diffrentiate().intervals_of_increase_decreasing()
-        print(intervals)
-        concavity = {}
+            return "Constant function"
+        if not interval:
+            interval = self.domain
+        intervals = self.diffrentiate().intervals_of_increase_decreasing(interval=interval)
+        concavity = {"Linear": [], "Concave Up": [], "Concave Down": []}
         for key, value in intervals.items():
             if key == "Increasing":
-                concavity["Concave Up"] = value
+                concavity["Concave Up"] += [value]
             elif key == "Decreasing":
-                concavity["Concave Down"] = value
+                concavity["Concave Down"] += [value]
             else:
-                if diff2.expression > 0:
-                    concavity["Concave Up"] = value
-                elif diff2.expression < 0:
-                    concavity["Concave Down"] = value
-                else:
-                    return "Linear Function (No Concavity)"
+                concavity["Linear"] += [value]
         return concavity
 
     def asymptotes(self):
         """Calculate the asymptotes of the function."""
         asymptotes = {}
-        critical_pts = self.critical_points()
-        if critical_pts:
-            for cr_point in critical_pts:
+        if len(self.fvars) == 0:
+            return "No asymptotes"
+        undefined_points = sp.singularities(self.expression, self.fvars[0])
+        if undefined_points is not sp.EmptySet:
+            for point in undefined_points:
                 asymptotes["vertical_asymptotes"] = (
-                    f"{self.fvars[0]} -> {cr_point}",
-                    f"f({self.fvars[0]}) -> {sp.limit(self.expression, self.fvars[0], cr_point)}",
+                    f"{self.fvars[0]} -> {point}",
+                    f"f({self.fvars[0]}) -> {sp.limit(self.expression, self.fvars[0], point)}",
                 )
         asymptotes["horizontal_asymptote"] = [(
                     f"{self.fvars[0]} -> {sp.oo}",

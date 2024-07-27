@@ -45,13 +45,15 @@ def advanced_calculator():
 8- Inflection points
 9- Concavity
 10- Asymptotes
+11- Domain and Range
+12- Extrema
 """
         )
         choice = input("Enter the choice or 'm' to main menu: ")
         if choice == "1":
             x = input("Enter x: ")
             try:
-                print(function.evaluate(x))
+                print(pretty(function.evaluate(x)))
             except ValueError as e:
                 print(str(e))
             except TypeError as e:
@@ -81,20 +83,19 @@ def advanced_calculator():
         elif choice == "5":
             point = input("Enter the point(x): ")
             try:
-                print(function.slope(value=point))
+                print(pretty(function.slope(value=point)))
             except ValueError as e:
                 print(f"Invalid point, {str(e)}")
         elif choice == "6":
             critical_points = function.critical_points()
-            if critical_points is None:
+            if len(critical_points) == 0:
                 print("No critical points found.")
             else:
-                print("Critical points: ", critical_points)
+                print("Critical points: \n")
+                print(pretty(critical_points))
         elif choice == "7":
-            print(
-                "Interval of increasing and decreasing: ",
-                pretty(function.intervals_of_increase_decreasing()),
-            )
+            print("Interval of increasing and decreasing: ")
+            print(pretty(function.intervals_of_increase_decreasing()))
         elif choice == "8":
             inflection_points = function.inflection_points()
             if inflection_points is None:
@@ -102,9 +103,18 @@ def advanced_calculator():
             else:
                 print("Inflection points: ", inflection_points)
         elif choice == "9":
-            print("Concavity: ", pretty(function.concavity()))
+            print("Concavity: ")
+            print(pretty(function.concavity()))
         elif choice == "10":
-            print("Asymptotes: ", pretty(function.asymptotes()))
+            print("Asymptotes: ")
+            print(pretty(function.asymptotes()))
+        elif choice == "11":
+            print("Domain: ", pretty(function.domain))
+            print("Range: ", pretty(function.range))
+        elif choice == "12":
+            mx, mn = function.extrema()
+            print("Maximun: ", pretty(mx))
+            print("Minimum: ", pretty(mn))
         elif choice.lower() == "m":
             return
         else:
