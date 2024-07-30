@@ -32,6 +32,7 @@ def advanced_calculator():
                 function = Function(fun)
             except ValueError as e:
                 print(f"oooopppps, {str(e)}")
+                fun = ""
                 continue
         print(
             """
