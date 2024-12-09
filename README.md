@@ -95,3 +95,4 @@ Thank you for using DerivativeXpert! If you have any questions or feedback, feel
 ## To-Do:
 - TextUI class
 - More unittests
+- Modify the relationship between `Function` and `Derivative` Classes to be **inheritance**.
